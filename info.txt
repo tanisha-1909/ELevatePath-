@@ -1,0 +1,8 @@
+- @tailwindcss/postcss
+- tailwindcss
+- eslint
+- eslint-config-next
+- @eslint/eslintrc
+
+
+ npx shadcn@latest add button- creates component folder inside app

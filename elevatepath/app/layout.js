@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
+import { dark } from '@clerk/themes';
 
 const inter= Inter({subsets:["latin"]});
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
   const defaultColorScheme = "dark";
 
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+      baseTheme:dark
+    }}>
       <html
       lang="en"
       suppressHydrationWarning
