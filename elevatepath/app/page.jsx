@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { howItWorks } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonial";
 import Image from "next/image";
+import { Accordion, AccordionContent,AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
+import { faqs } from "@/data/faqs";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -124,6 +128,60 @@ export default function Home() {
           })}</div>
         </div>
       </section>
+
+      <section className="w-full py-12 md:py-24 bg-white dark:bg-neutral-900">
+  <div className="container mx-auto px-4 md:px-6">
+    <div className="text-center max-w-3xl mx-auto mb-12">
+      <h2 className="text-3xl font-bold mb-4">
+        Frequently Asked Questions
+      </h2>
+      <p className="text-muted-foreground">
+        Find answers to common questions about our platform
+      </p>
+    </div>
+
+    <div className="max-w-3xl mx-auto rounded-lg border divide-y divide-border">
+      <Accordion type="single" collapsible className="w-full">
+        {faqs.map((item, index) => (
+          <AccordionItem key={index} value={`item-${index}`} className="py-2">
+            <AccordionTrigger className="flex justify-between items-center text-left font-medium">
+              {item.question}
+              {/* Symbol changes when open/closed */}
+              <span className="ml-2 text-lg transition-transform duration-200">
+                +
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground pt-2">
+              {item.answer}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+        </div>
+      </div>
+    </section>
+
+    <section className="w-full ">
+    <div className=" mx-auto py-24 gradient rounded-lg">
+      <div className="flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl md:text-5xl">
+          Ready to Accelerate Your Career?
+        </h2>
+        <p className="mx-auto max-w-[600px] text-primary-foreground/80 md:text-xl">
+          Join thousands of professionals who are advancing their careers with AI-powered guidance.
+        </p>
+        <Link href="/dashboard" passHref>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="h-11 mt-5 animate-bounce"
+          >
+            Start Your Journey Today <ArrowRight className="ml-2 h-4 w-4"/>
+          </Button>
+        </Link>
+      </div>    
+      </div>
+    </section>
     </div>
   );
 }
