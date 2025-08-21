@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { checkuser } from "@/lib/checkuser";
 
-const Header = () => {
+const Header = async() => {
+  await checkuser();
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[background-filter]:bg-background/60">
       <nav className="container mx-auto  h-24 flex items-center justify-between">
