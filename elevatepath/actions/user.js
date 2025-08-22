@@ -28,12 +28,15 @@ export async function updateUser(data){
                     },
                 });
                 if (!industryInsight) {
-                    const insights = await generateAIInsights(data.industry);
-
-                    industryInsight = await db.industryInsight.create({
+                    industryInsight = await tx.industryInsight.create({
                         data: {
                         industry: data.industry,
-                        ...insights,
+                        salaryRanges:[],
+                        growthRate:0,
+                        demandLevel:"MEDIUM",
+                        topSkills:[],
+                        recommendedSkills:[],
+                        marketOutlook:"NEUTRAL",
                         nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
                         },
                     });
@@ -58,10 +61,10 @@ export async function updateUser(data){
             }
         );
 
-        return result.updatedUser;
+        return {success:true, ...result};
     }catch(error){
         console.log("Error updating user and industry", error.message);
-        throw new Error("Failed to update profile");
+        throw new Error("Failed to update profile" + error.message);
     }
 }
 
