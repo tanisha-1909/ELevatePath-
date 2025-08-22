@@ -3,7 +3,8 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 // import { revalidatePath } from "next/cache";
-// import { generateAIInsights } from "./dashboard";
+import { generateAIInsights } from "./dashboard";
+
 
 export async function updateUser(data){
     const {userId}= await auth();
@@ -28,19 +29,17 @@ export async function updateUser(data){
                     },
                 });
                 if (!industryInsight) {
-                    industryInsight = await tx.industryInsight.create({
-                        data: {
-                        industry: data.industry,
-                        salaryRanges:[],
-                        growthRate:0,
-                        demandLevel:"MEDIUM",
-                        topSkills:[],
-                        recommendedSkills:[],
-                        marketOutlook:"NEUTRAL",
-                        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                        },
+                    const insights = await generateAIInsights(data.industry);
+                    
+                    industryInsight = await db.industryInsight.create({
+                          data: {
+                            industry: data.industry,
+                            ...insights,
+                            nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                          },
                     });
-                    }
+                    
+                }
 
                     // Now update the user
                     const updatedUser = await tx.user.update({
@@ -69,17 +68,9 @@ export async function updateUser(data){
 }
 
 export async function getUserOnboardingStatus(data){
-    const {userId}= await auth();
+    const { userId } = await auth(); // ✅ Get userId from Clerk
 
-    if(!userId) throw new Error("Unauthorized");
-
-    const user= await db.user.findUnique({
-        where:{
-            clerkUserId: userId,
-        },
-    });
-
-    if(!user) throw new Error("User not Found");
+    if (!userId) throw new Error("Unauthorized");
 
     try{
         const user= await db.user  .findUnique({
