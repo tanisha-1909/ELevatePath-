@@ -16,11 +16,15 @@ import { generateQuiz, savequizresult } from "@/actions/interview";
 import useFetch from "@/Hooks/use-fetch";
 import { BarLoader } from "react-spinners";
 import { Loader2 } from "lucide-react";
+import QuizResult from "./quiz-result";
+
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [resultData, setResultData] = useState(null);
+
 
   const {
     loading: generatingQuiz,
@@ -66,12 +70,32 @@ const Quiz = () => {
 
   const finishQuiz = async () => {
     const score = calculateScore();
+    const result = {
+    quizScore: score,
+    improvementTip: score < 70 ? "Review weak areas and try again!" : "Great job! Keep practicing.",
+    questions: quizData.map((q, index) => ({
+      question: q.question,
+      userAnswer: answers[index],
+      answer: q.correctAnswer,
+      isCorrect: answers[index] === q.correctAnswer,
+      explanation: q.explanation,
+    })),
+  };
     try {
       await saveQuizResultFn(quizData, answers, score);
+      setResultData(result); 
       toast.success("Quiz completed");
     } catch (error) {
       toast.error(error.message || "Failed to save quiz results");
     }
+  };
+
+  const startNewQuiz = () => {
+    setCurrentQuestion(0);
+    setAnswers([]);
+    setShowExplanation(false);
+    generateQuizFn();
+    setResultData(null);
   };
 
   if (generatingQuiz) {

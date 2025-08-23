@@ -17,7 +17,7 @@ export async function generateQuiz() {
 
   try {
     const prompt = `
-      Generate 10 technical interview questions for a ${user.industry} professional
+      Generate 2 technical interview questions for a ${user.industry} professional
       ${user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""}.
       
       Each question should be multiple choice with 4 options.
