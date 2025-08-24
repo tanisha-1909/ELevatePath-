@@ -1,3 +1,5 @@
+"use client";
+
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { CheckCircle2, XCircle ,Trophy} from "lucide-react";
 import { Button } from "@/components/ui/button";

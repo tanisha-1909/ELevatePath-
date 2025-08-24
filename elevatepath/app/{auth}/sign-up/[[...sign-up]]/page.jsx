@@ -5,4 +5,4 @@ const Page=()=>{
     return <SignUp/>
 };
 
-export default SIgn;
+export default Page;

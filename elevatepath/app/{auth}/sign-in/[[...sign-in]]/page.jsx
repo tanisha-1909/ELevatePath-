@@ -1,8 +1,5 @@
-import { SignIn } from "@clerk/clerk-react";
-import React from "react";
+import { SignUp } from "@clerk/nextjs";
 
-const Page=()=>{
-    return <SignIn/>
-};
-
-export default SIgn;
+export default function Page() {
+  return <SignUp />;
+}
