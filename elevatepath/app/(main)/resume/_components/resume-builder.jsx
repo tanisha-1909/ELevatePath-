@@ -180,7 +180,7 @@ const ResumeBuilder = ({ initialContent }) => {
           <form className="space-y-8">
             {/* Contact Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg bg-muted/50">
-              <h3 className="text-lg font-medium">Contact Information</h3>
+              <h3 className="text-lg font-medium col-span-1 md:col-span-2">Contact Information</h3>
               <div className="space-y-4">
                 {["email", "mobile", "linkedin", "twitter"].map((field) => (
                   <div key={field} className="space-y-2">
@@ -228,7 +228,7 @@ const ResumeBuilder = ({ initialContent }) => {
                   name={field}
                   control={control}
                   render={({ field: controllerField }) => (
-                    <EntryForm type={field.charAt(0).toUpperCase() + field.slice(1, -1)} entries={controllerField.value} onChange={controllerField.onChange} />
+                    <EntryForm type={field.charAt(0).toUpperCase() + field.slice(1)} entries={controllerField.value} onChange={controllerField.onChange} />
                   )}
                 />
                 {errors[field] && <p className="text-sm text-red-500">{errors[field].message}</p>}
