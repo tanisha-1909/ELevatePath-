@@ -27,6 +27,7 @@ const Header = async() => {
             width={96}
             height={96}
             className="h-24 w-auto object-contain"
+            priority
           />
         </Link>
 
@@ -81,10 +82,10 @@ const Header = async() => {
           </SignedIn>
 
           <SignedOut>
-            <SignInButton mode="modal"  asChild>
+            <SignInButton mode="modal" >
               <Button variant="outline">Sign In</Button>
             </SignInButton>
-            <SignUpButton mode="modal" asChild>
+            <SignUpButton mode="modal">
               <Button variant="outline">Sign Up</Button>
             </SignUpButton>
           </SignedOut>

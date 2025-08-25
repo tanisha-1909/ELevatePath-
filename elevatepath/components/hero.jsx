@@ -46,7 +46,7 @@ const HeroSection=()=>{
                         <Button size="lg" className="px-8">Get Started</Button>
                     </Link>
                     ) : (
-                    <SignInButton mode="modal" redirectUrl="/dashboard">
+                    <SignInButton mode="modal">
                         <Button size="lg" className="px-8">Get Started</Button>
                     </SignInButton>
                 )}

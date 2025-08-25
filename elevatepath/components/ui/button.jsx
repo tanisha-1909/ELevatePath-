@@ -39,17 +39,19 @@ function Button({
   className,
   variant,
   size,
-  asChild = false,
+  asChild: isChild = false, // ✅ renamed so it doesn't leak
   ...props
 }) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = isChild ? Slot : "button";
 
   return (
-    (<Comp
+    <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props} />)
+      {...props} // now asChild won't leak
+    />
   );
 }
+
 
 export { Button, buttonVariants }

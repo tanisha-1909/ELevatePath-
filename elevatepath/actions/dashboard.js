@@ -29,12 +29,30 @@ export const generateAIInsights = async (industry) => {
           Include at least 5 skills and trends.
         `;
 
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const text = response.text();
-  const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+  try {
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
-  return JSON.parse(cleanedText);
+    return JSON.parse(cleanedText);
+  } catch (err) {
+    console.error("Gemini API failed:", err.message);
+
+    // ✅ fallback JSON so your DB and UI don't break
+    return {
+      salaryRanges: [
+        { role: "Software Engineer", min: 40000, max: 90000, median: 65000, location: "Global" },
+        { role: "Data Analyst", min: 35000, max: 80000, median: 60000, location: "Global" },
+      ],
+      growthRate: 0,
+      demandLevel: "MEDIUM",
+      topSkills: ["Problem Solving", "Communication"],
+      marketOutlook: "NEUTRAL",
+      keyTrends: ["Insights unavailable due to quota limits"],
+      recommendedSkills: ["Learn continuously"],
+    };
+  }
 };
 
 export async function getIndustryInsights() {
