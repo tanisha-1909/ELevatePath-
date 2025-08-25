@@ -1,13 +1,9 @@
-import Image1 from '../public/image1.jpg';
-import Image2 from '../public/image2.jpg';
-import Image3 from '../public/image3.jpg';
-
 export const testimonial = [
   {
     quote:
       "The AI-powered interview prep was a game-changer. Landed my dream job at a top tech company!",
     author: "Sarah Chen",
-    image: Image1,
+    image: "/image1.jpg", // <-- Use path relative to public
     role: "Software Engineer",
     company: "Tech Giant Co.",
   },
@@ -15,7 +11,7 @@ export const testimonial = [
     quote:
       "The industry insights helped me pivot my career successfully. The salary data was spot-on!",
     author: "Michael Rodriguez",
-    image: Image2,
+    image: "/image2.jpg",
     role: "Product Manager",
     company: "StartUp Inc.",
   },
@@ -23,7 +19,7 @@ export const testimonial = [
     quote:
       "My resume's ATS score improved significantly. Got more interviews in two weeks than in six months!",
     author: "Priya Patel",
-    image:Image3,
+    image: "/image3.jpg",
     role: "Marketing Director",
     company: "Global Corp",
   },
