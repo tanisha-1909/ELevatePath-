@@ -3,8 +3,11 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+ import { useUser, SignInButton } from "@clerk/nextjs";
 
 const HeroSection=()=>{
+   
+    const { isSignedIn } = useUser();
     const imageRef=useRef(null);
     useEffect(()=>{
         const imageElement= imageRef.current;
@@ -38,8 +41,15 @@ const HeroSection=()=>{
                 </p>
             </div>
             <div className="flex justify-center space-x-4">
-                <Link href="/dashboard">
-                <Button size="lg" className="px-8">Get Started</Button></Link>
+                {isSignedIn ? (
+                    <Link href="/dashboard">
+                        <Button size="lg" className="px-8">Get Started</Button>
+                    </Link>
+                    ) : (
+                    <SignInButton mode="modal" redirectUrl="/dashboard">
+                        <Button size="lg" className="px-8">Get Started</Button>
+                    </SignInButton>
+                )}
                 <Link href="https://www.youtube.com/roadsidecoder">
                 <Button size="lg" className="px-8" variant="outline">Watch Demo</Button></Link>
             </div>
