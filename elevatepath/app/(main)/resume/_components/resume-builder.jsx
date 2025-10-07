@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeSchema } from "@/app/lib/schema";
 import useFetch from "@/Hooks/use-fetch";
 import { saveResume } from "@/actions/resume";
 import { useUser } from "@clerk/nextjs";
-import html2pdf from "html2pdf.js";
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,7 @@ const ResumeBuilder = ({ initialContent }) => {
   const [previewContent, setPreviewContent] = useState(initialContent || "");
   const [resumeMode, setResumeMode] = useState("preview");
   const [isGenerating, setIsGenerating] = useState(false);
+  const html2pdfRef = useRef(null);
   const { user } = useUser();
 
   const {
@@ -98,6 +99,12 @@ const ResumeBuilder = ({ initialContent }) => {
       const element = document.getElementById("resume-pdf");
       if (!element) return;
 
+      // Lazy-load html2pdf only in the browser
+      if (!html2pdfRef.current) {
+        const mod = await import("html2pdf.js");
+        html2pdfRef.current = mod?.default ?? mod;
+      }
+
       const opt = {
         margin: [15, 15],
         filename: "resume.pdf",
@@ -106,7 +113,7 @@ const ResumeBuilder = ({ initialContent }) => {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
 
-      await html2pdf().set(opt).from(element).save();
+      await html2pdfRef.current().set(opt).from(element).save();
     } catch (error) {
       console.error("PDF generation error:", error);
     } finally {

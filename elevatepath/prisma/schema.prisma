@@ -29,6 +29,7 @@ model User {
   assessments      Assessment[]
   resume           Resume?
   coverLetter      CoverLetter[]
+  mockInterviewSessions MockInterviewSession[]
 }
 
 
@@ -76,25 +77,25 @@ model CoverLetter {
 model IndustryInsight {
   id            String    @id @default(cuid())
   industry      String    @unique  // The industry this data belongs to (e.g., "tech-software-development")
-  
+
   // Users in this industry
   users         User[]
-  
+
   // Salary data
   salaryRanges  Json[]    // Array of { role: string, min: float, max: float, median: float, location: string? }
-  
+
   // Industry trends
   growthRate    Float     // Industry growth rate
   demandLevel   DemandLevel    // "High", "Medium", "Low"
   topSkills     String[]  // Most in-demand skills
-  
+
   // Market conditions
   marketOutlook MarketOutlook    // "Positive", "Neutral", "Negative"
   keyTrends     String[]  // Array of current industry trends
-  
+
   // Learning suggestions
   recommendedSkills String[]  // Skills recommended for the industry
-  
+
   lastUpdated   DateTime  @default(now())
   nextUpdate    DateTime  // Scheduled update time
 
@@ -102,12 +103,43 @@ model IndustryInsight {
 }
 
 enum DemandLevel{
-  HIGH 
-  MEDIUM 
-  LOW 
+  HIGH
+  MEDIUM
+  LOW
 }
 enum MarketOutlook{
-  POSITIVE 
-  NEUTRAL 
+  POSITIVE
+  NEUTRAL
   NEGATIVE
+}
+
+
+// Live Mock Interview session tracking
+model MockInterviewSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  role      String   // e.g., "Product Manager"
+  category  String   // e.g., "Behavioral" | "Technical"
+  status    String   @default("active") // active | ended
+  summary   String?  @db.Text            // Final AI-generated performance summary
+  score     Float?                        // 0-100 score
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  messages  MockInterviewMessage[]
+
+  @@index([userId])
+}
+
+model MockInterviewMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   MockInterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sender    String   // "AI" | "USER"
+  content   String   @db.Text
+  evaluation String? @db.Text             // Optional brief feedback from AI about the user's last answer
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+
 }

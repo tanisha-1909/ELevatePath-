@@ -68,26 +68,32 @@ export async function getIndustryInsights() {
 
   if (!user) throw new Error("User not found");
 
-
-  if (!user.industryInsight) {
-    const insights = await generateAIInsights(user.industry);
-
-    const industryInsight = await db.industryInsight.upsert({
-      where: { industry: user.industry }, // unique field
-      update: {
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-      create: {
-        industry: user.industry,
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
-
-
-    return industryInsight;
+  // If the user is already linked to an IndustryInsight, return it fast
+  if (user.industryInsight) {
+    return user.industryInsight;
   }
 
-  return user.industryInsight;
+  // Otherwise, generate (or reuse existing per-industry) and link the user to it
+  const insights = await generateAIInsights(user.industry);
+
+  const industryInsight = await db.industryInsight.upsert({
+    where: { industry: user.industry }, // unique field
+    update: {
+      ...insights,
+      nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+    create: {
+      industry: user.industry,
+      ...insights,
+      nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  // Link the user so subsequent loads are instant and do NOT re-call AI
+  await db.user.update({
+    where: { id: user.id },
+    data: { industryInsightId: industryInsight.id },
+  });
+
+  return industryInsight;
 }

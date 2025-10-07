@@ -61,6 +61,7 @@ export async function updateUser(data) {
         experience: data.experience,
         bio: data.bio,
         skills: data.skills,
+        industryInsightId: industryInsight?.id ?? undefined,
       },
     });
   });

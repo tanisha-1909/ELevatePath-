@@ -5,16 +5,19 @@ import { getIndustryInsights } from "@/actions/dashboard";
 import DashboardView from "./_components/dashboard-view";
 
 const IndustryInsightsPage=async()=>{
-    const {isOnboarded}=await getUserOnboardingStatus();
-    const insights= await getIndustryInsights();
-    
-        if(!isOnboarded){
-            redirect("/onboarding");
+    // Fetch in parallel to reduce TTFB
+    const [onboard, insights] = await Promise.all([
+      getUserOnboardingStatus(),
+      getIndustryInsights(),
+    ]);
+
+    if(!onboard.isOnboarded){
+      redirect("/onboarding");
     }
     return(
-        <div className="container mx-auto">
-            <DashboardView insights={insights}/>
-        </div>
+      <div className="container mx-auto">
+        <DashboardView insights={insights}/>
+      </div>
     )
 }
 

@@ -36,9 +36,14 @@ const QuizList = ({ assessments }) => {
             Review your past quiz performance
           </CardDescription>
         </div>
-        <Button onClick={() => router.push("/interview/mock")}>
-          Start new Quiz
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => router.push("/interview/mock")}>
+            Start Quiz
+          </Button>
+          <Button variant="outline" onClick={() => router.push("/interview/live")}>
+            Start Mock Interview
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent>
