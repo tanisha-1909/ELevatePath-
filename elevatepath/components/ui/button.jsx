@@ -44,11 +44,23 @@ function Button({
 }) {
   const Comp = isChild ? Slot : "button";
 
+  // Strip non-DOM props that sometimes get passed through by wrapper components (e.g., Clerk)
+  // Avoid React unknown prop warnings on DOM elements
+  const {
+    afterSignInUrl,
+    afterSignUpUrl,
+    redirectUrl,
+    forceRedirectUrl,
+    signUpForceRedirectUrl,
+    mode,
+    ...rest
+  } = props;
+
   return (
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props} // now asChild won't leak
+      {...rest}
     />
   );
 }

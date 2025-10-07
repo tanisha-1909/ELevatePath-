@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { generateAIInsights } from "./dashboard";
 
 /**
@@ -13,10 +13,30 @@ export async function updateUser(data) {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
+  let user = await db.user.findUnique({
     where: { clerkUserId: userId },
   });
-  if (!user) throw new Error("User not Found");
+  if (!user) {
+    // Create or connect the user record on-the-fly if missing (handle existing email)
+    const cu = await currentUser();
+    if (!cu) throw new Error("User not Found");
+    const email = cu.emailAddresses?.[0]?.emailAddress ?? "";
+
+    user = await db.user.upsert({
+      where: { email },
+      update: {
+        clerkUserId: cu.id,
+        name: `${cu.firstName ?? ""} ${cu.lastName ?? ""}`.trim(),
+        imageUrl: cu.imageUrl ?? "",
+      },
+      create: {
+        clerkUserId: cu.id,
+        name: `${cu.firstName ?? ""} ${cu.lastName ?? ""}`.trim(),
+        imageUrl: cu.imageUrl ?? "",
+        email,
+      },
+    });
+  }
 
   let industryInsight = await db.industryInsight.findUnique({
     where: { industry: data.industry },
