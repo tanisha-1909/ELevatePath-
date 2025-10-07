@@ -82,10 +82,10 @@ const Header = async() => {
           </SignedIn>
 
           <SignedOut>
-            <SignInButton mode="modal"  redirectUrl="https://e-levate-path.vercel.app/dashboard">
+            <SignInButton mode="modal" afterSignInUrl="/dashboard">
               <Button variant="outline">Sign In</Button>
             </SignInButton>
-            <SignUpButton mode="modal" redirectUrl="https://e-levate-path.vercel.app/dashboard">
+            <SignUpButton mode="modal" afterSignUpUrl="/dashboard">
               <Button variant="outline">Sign Up</Button>
             </SignUpButton>
           </SignedOut>
