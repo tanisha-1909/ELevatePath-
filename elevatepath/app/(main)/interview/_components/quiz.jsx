@@ -92,7 +92,7 @@ const Quiz = () => {
 
   const startNewQuiz = () => {
     setCurrentQuestion(0);
-    setAnswers([]);
+    setAnswers([]);``
     setShowExplanation(false);
     generateQuizFn();
     setResultData(null);
