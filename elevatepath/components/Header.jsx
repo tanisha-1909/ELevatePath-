@@ -12,8 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { checkuser } from "@/lib/checkuser";
+import { headers } from "next/headers";
 
 const Header = async() => {
+  // Force dynamic rendering on Vercel so auth state is fresh per request
+  headers();
   await checkuser();
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[background-filter]:bg-background/60">
